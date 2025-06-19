@@ -19,8 +19,8 @@ namespace AsaasClient.Core
 {
     public class BaseManager
     {
-        private const string ProductionUrl = "https://www.asaas.com";
-        private const string SandboxUrl = "https://sandbox.asaas.com";
+        private const string ProductionUrl = "https://api.asaas.com";
+        private const string SandboxUrl = "https://api-sandbox.asaas.com";
 
         private readonly ApiSettings _settings;
 
@@ -141,11 +141,13 @@ namespace AsaasClient.Core
             httpClient.DefaultRequestHeaders.TryAddWithoutValidation("access_token", _settings.AccessToken);
             httpClient.BaseAddress = BuildBaseAddress();
             httpClient.Timeout = _settings.TimeOut;
+            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(_settings.ApplicationName, Assembly.GetExecutingAssembly().GetName().Version.ToString()));
 
             return httpClient;
         }
 
-        private JsonSerializerSettings BuildJsonSettings() {
+        private JsonSerializerSettings BuildJsonSettings()
+        {
             var jsonSerializerSettings = new JsonSerializerSettings();
             jsonSerializerSettings.Converters.Add(new StringEnumConverter());
             jsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -155,7 +157,7 @@ namespace AsaasClient.Core
 
         private string BuildApiRoute(string resource)
         {
-            return $"/api/v3/{resource}";
+            return $"/v3/{resource}";
         }
 
         private Uri BuildBaseAddress()

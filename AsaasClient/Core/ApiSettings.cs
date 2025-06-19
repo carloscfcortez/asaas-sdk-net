@@ -8,10 +8,14 @@ namespace AsaasClient.Core
         public AsaasEnvironment AsaasEnvironment { get; }
         public TimeSpan TimeOut { get; set; }
 
-        public ApiSettings(string accessToken, AsaasEnvironment asaasEnvironment)
+        public string ApplicationName { get; set; } = "AsaasClient";
+
+        public ApiSettings(
+            string accessToken, AsaasEnvironment asaasEnvironment, string applicationName)
         {
             AccessToken = accessToken;
             AsaasEnvironment = asaasEnvironment;
+            ApplicationName = applicationName ?? "AsaasClient";
             TimeOut = TimeSpan.FromSeconds(30);
         }
     }

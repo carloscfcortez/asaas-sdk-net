@@ -21,10 +21,14 @@ namespace AsaasClient.Core.Response
 
         public ResponseList(HttpStatusCode httpStatusCode, string content) : base(httpStatusCode, content)
         {
-            if (httpStatusCode != HttpStatusCode.OK) return;
+            if (httpStatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception($"Unexpected HTTP status code: {httpStatusCode}. Content: {content}");
+            }
+
 
             JObject listObject = JObject.Parse(content);
-            
+
             HasMore = listObject.GetValue("hasMore").ToObject<bool>();
             TotalCount = listObject.GetValue("totalCount").ToObject<int>();
             Limit = listObject.GetValue("limit").ToObject<int>();
